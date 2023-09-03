@@ -33,3 +33,4 @@ const ColorInput = forwardRef<ElementRef<typeof MuiColorInput>, Props>(
 );
 
 export default ColorInput;
+export type { Color };

@@ -1,4 +1,5 @@
-import ColorInput from "@/components/config/ColorInput";
+import ColorInput, { Color } from "@/components/base/ColorInput";
+import SliderInput from "@/components/base/SliderInput";
 
 import { Layer, useLayersContext } from "@/stores/layersStore";
 
@@ -9,28 +10,44 @@ interface Props {
 const LayerConfig = ({ layer }: Props) => {
   const { updateLayerProps } = useLayersContext();
 
+  const handleFillColorChange = (color: Color) =>
+    updateLayerProps(layer.id, {
+      getFillColor: color,
+    });
+
+  const handleOutlineColorChange = (color: Color) =>
+    updateLayerProps(layer.id, {
+      getLineColor: color,
+    });
+
+  const handleRadiusChange = (radius: number) =>
+    updateLayerProps(layer.id, {
+      getPointRadius: radius,
+    });
+
   return (
     <>
       <ColorInput
         label="Fill color"
         value={layer.props.getFillColor}
-        onChange={(color) =>
-          updateLayerProps(layer.id, {
-            getFillColor: color,
-          })
-        }
+        onChange={handleFillColorChange}
         style={{ width: "100%" }}
       />
       <ColorInput
         label="Outline color"
         value={layer.props.getLineColor}
-        onChange={(color) =>
-          updateLayerProps(layer.id, {
-            getLineColor: color,
-          })
-        }
+        onChange={handleOutlineColorChange}
         sx={{ width: "100%" }}
       />
+      {layer.props.geomType === "points" && (
+        <SliderInput
+          label="Radius"
+          value={layer.props.getPointRadius}
+          onChange={handleRadiusChange}
+          min={0}
+          max={100}
+        />
+      )}
     </>
   );
 };

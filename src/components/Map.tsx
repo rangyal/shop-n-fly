@@ -11,9 +11,9 @@ import { useLayersContext } from "@/stores/layersStore";
 
 // Focusing on USA because Sociodemographics data is USA only
 const INITIAL_VIEWSTATE = {
-  longitude: -110.37672316136673,
-  latitude: 51.48069573057817,
-  zoom: 2.283251379504558,
+  longitude: -110,
+  latitude: 51,
+  zoom: 2,
 };
 
 setDefaultCredentials({

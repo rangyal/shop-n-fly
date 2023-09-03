@@ -19,7 +19,7 @@ const TopBar = ({ isSidebarOpen, onOpenSidebar }: TopBarProps) => {
         {onOpenSidebar && (
           <IconButton
             color="inherit"
-            aria-label="Open drawer"
+            aria-label="Open sidebar"
             edge="end"
             onClick={onOpenSidebar}
             sx={{ ...(isSidebarOpen && { display: "none" }) }}

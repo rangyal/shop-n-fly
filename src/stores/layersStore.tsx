@@ -3,7 +3,9 @@ import { CartoLayer as CartoLayerBase, MAP_TYPES } from "@deck.gl/carto/typed";
 
 type Color = [number, number, number] | [number, number, number, number];
 type ExtraProps = {
+  geomType: "tiles" | "points";
   cartoLabel: string;
+  getPointRadius: number;
   getLineColor: Color;
   getFillColor: Color;
 } & Record<string, unknown>;
@@ -15,6 +17,7 @@ const useLayers = () => {
     new CartoLayer({
       id: "sociodemographics",
       cartoLabel: "Sociodemographics",
+      geomType: "tiles",
       type: MAP_TYPES.TILESET,
       connection: "carto_dw",
       data: "carto-demo-data.demo_tilesets.sociodemographics_usa_blockgroup",
@@ -25,12 +28,11 @@ const useLayers = () => {
     new CartoLayer({
       id: "airports",
       cartoLabel: "Airports",
+      geomType: "points",
       type: MAP_TYPES.TABLE,
       connection: "carto_dw",
       data: "carto-demo-data.demo_tables.world_airports",
-      geoColumn: "geom",
       pointRadiusUnits: "pixels",
-      pointRadiusMinPixels: 2,
       getPointRadius: 4,
       getLineColor: [255, 255, 255, 128],
       getFillColor: [238, 77, 90],
@@ -39,12 +41,11 @@ const useLayers = () => {
     new CartoLayer({
       id: "retailStores",
       cartoLabel: "Retail Stores",
+      geomType: "points",
       type: MAP_TYPES.TABLE,
       connection: "carto_dw",
       data: "carto-demo-data.demo_tables.retail_stores",
-      geoColumn: "geom",
       pointRadiusUnits: "pixels",
-      pointRadiusMinPixels: 2,
       getPointRadius: 4,
       getLineColor: [255, 255, 255, 128],
       getFillColor: [90, 77, 238],

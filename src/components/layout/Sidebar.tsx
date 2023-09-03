@@ -39,7 +39,7 @@ const Sidebar = ({ onClose, children }: Props) => {
     >
       <DrawerHeader>
         {onClose && (
-          <IconButton onClick={onClose}>
+          <IconButton onClick={onClose} aria-label="Close sidebar">
             {theme.direction === "rtl" ? (
               <ChevronLeftIcon />
             ) : (
