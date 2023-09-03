@@ -1,5 +1,6 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 import { CartoLayer as CartoLayerBase, MAP_TYPES } from "@deck.gl/carto/typed";
+import useLayerDataState from "./useLayerDataState";
 
 type Color = [number, number, number] | [number, number, number, number];
 type ExtraProps = {
@@ -13,6 +14,8 @@ type ExtraProps = {
 class CartoLayer extends CartoLayerBase<ExtraProps> {}
 
 const useLayers = () => {
+  const { layerDataLoadHandlerProps, getLayerDataLoadState } =
+    useLayerDataState();
   const [layers, setLayers] = useState([
     new CartoLayer({
       id: "sociodemographics",
@@ -24,6 +27,7 @@ const useLayers = () => {
       getLineColor: [128, 128, 128, 150],
       getFillColor: [128, 128, 128, 30],
       lineWidthMinPixels: 1,
+      ...layerDataLoadHandlerProps("sociodemographics"),
     }),
     new CartoLayer({
       id: "airports",
@@ -37,6 +41,7 @@ const useLayers = () => {
       getLineColor: [255, 255, 255, 128],
       getFillColor: [238, 77, 90],
       lineWidthMinPixels: 1,
+      ...layerDataLoadHandlerProps("airports"),
     }),
     new CartoLayer({
       id: "retailStores",
@@ -50,6 +55,7 @@ const useLayers = () => {
       getLineColor: [255, 255, 255, 128],
       getFillColor: [90, 77, 238],
       lineWidthMinPixels: 1,
+      ...layerDataLoadHandlerProps("retailStores"),
     }),
   ]);
 
@@ -72,7 +78,7 @@ const useLayers = () => {
     setLayers(newLayers);
   };
 
-  return { layers, updateLayerProps };
+  return { layers, getLayerDataLoadState, updateLayerProps };
 };
 
 type UseLayersReturnType = ReturnType<typeof useLayers>;
