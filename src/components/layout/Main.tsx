@@ -11,8 +11,8 @@ const Main = ({ children }: Props) => {
     <Box
       component="main"
       sx={{
+        display: "flex",
         flexGrow: 1,
-        position: "relative",
       }}
     >
       {children}

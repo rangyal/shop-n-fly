@@ -1,12 +1,16 @@
+import { useCallback, useRef, useState } from "react";
 import StaticMap from "react-map-gl";
 import DeckGL from "@deck.gl/react/typed";
 import { BASEMAP } from "@deck.gl/carto/typed";
 import { setDefaultCredentials } from "@deck.gl/carto/typed";
 
+import Box from "@mui/material/Box";
+
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
+import useResizeObserver from "@/utils/useResizeObserver";
 import { useLayersContext } from "@/stores/layersStore";
 
 // Focusing on USA because Sociodemographics data is USA only
@@ -24,18 +28,46 @@ setDefaultCredentials({
 
 const Map = () => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [viewState, setViewState] = useState(INITIAL_VIEWSTATE);
   const { layers } = useLayersContext();
 
+  // Fix issue with DeckGL not updating width on resize
+  // Might be related to https://github.com/visgl/deck.gl/issues/6206
+  const updateViewRect = useCallback(
+    (rect: DOMRectReadOnly) => {
+      setViewState((currentViewState) => ({
+        ...currentViewState,
+        width: rect.width,
+      }));
+    },
+    [setViewState]
+  );
+  useResizeObserver(containerRef, updateViewRect);
+
+  const handleViewStateChange = (viewState: any) => {
+    setViewState(viewState.viewState);
+  };
+
   return (
-    <DeckGL
-      layers={layers}
-      initialViewState={INITIAL_VIEWSTATE}
-      controller={true}
+    <Box
+      sx={{
+        flexGrow: 1,
+        position: "relative",
+      }}
+      ref={containerRef}
     >
-      <StaticMap
-        mapStyle={prefersDarkMode ? BASEMAP.DARK_MATTER : BASEMAP.POSITRON}
-      />
-    </DeckGL>
+      <DeckGL
+        layers={layers}
+        viewState={viewState}
+        onViewStateChange={handleViewStateChange}
+        controller={true}
+      >
+        <StaticMap
+          mapStyle={prefersDarkMode ? BASEMAP.DARK_MATTER : BASEMAP.POSITRON}
+        />
+      </DeckGL>
+    </Box>
   );
 };
 
