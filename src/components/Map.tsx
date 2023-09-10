@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import StaticMap from "react-map-gl";
-import DeckGL from "@deck.gl/react/typed";
+import { ViewStateChangeParameters } from "@deck.gl/core/typed/controllers/controller";
+import DeckGL, { DeckGLProps } from "@deck.gl/react/typed";
 import { BASEMAP } from "@deck.gl/carto/typed";
 import { setDefaultCredentials } from "@deck.gl/carto/typed";
 
@@ -29,7 +30,8 @@ setDefaultCredentials({
 const Map = () => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const containerRef = useRef<HTMLDivElement>(null);
-  const [viewState, setViewState] = useState(INITIAL_VIEWSTATE);
+  const [viewState, setViewState] =
+    useState<ViewStateChangeParameters["viewState"]>(INITIAL_VIEWSTATE);
   const { layers } = useLayersContext();
 
   // Fix issue with DeckGL not updating width on resize
@@ -45,7 +47,9 @@ const Map = () => {
   );
   useResizeObserver(containerRef, updateViewRect);
 
-  const handleViewStateChange = (viewState: any) => {
+  const handleViewStateChange: DeckGLProps["onViewStateChange"] = (
+    viewState
+  ) => {
     setViewState(viewState.viewState);
   };
 
