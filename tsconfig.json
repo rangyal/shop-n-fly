@@ -21,9 +21,10 @@
       "@components/*": ["src/components/*"],
       "@stores/*": ["src/stores/*"],
       "@utils/*": ["src/utils/*"]
-    }
+    },
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src"],
+  "include": ["src", "setupTest.ts"],
   "references": [
     {
       "path": "./tsconfig.node.json"
